@@ -17,7 +17,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Sapio-screenshot][assets/Screenshot.png](https://github.com/fertilisai/sapio-chrome-extension/blob/main/assets/Screenshot.png?raw=true)
+[![Sapio-screenshot](assets/Screenshot.png)
 
 Sapio is a simple Chrome extension that allows you to chat with OpenAI's GPT-3 API more specifically ChatGPT. The goal is to continue adding features frequently and make the ChatGPT capabilities event more powerful.
 
