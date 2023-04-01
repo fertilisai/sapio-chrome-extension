@@ -1,0 +1,105 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16x16.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <!-- <link rel="stylesheet" href="./css/fa.min.css" /> -->
+    <link rel="stylesheet" href="./css/pico.min.css">
+    <link rel="stylesheet" id ="theme" href="./css/harmonic16-dark.min.css">
+    <link rel="stylesheet" href="./popup.css">
+    <title>Sapio</title>
+</head>
+<body data-theme="dark">
+    <div class="chatbox">
+    <article>
+
+        <header>
+            <button type="button" id="settings"><i class="fas fa-cog"></i></button>
+            <!-- <button type="button" class="hide"><i class="fas fa-times"></i></button> -->
+        </header>
+        
+        <div class="bin">
+
+            <div class="settings-menu" style="display: none;"> 
+                <form>
+                    <br />
+                    <div class="submit">
+                        <button type="button" id="save">Save</button>  
+                        <button type="button" id="cancel">Cancel</button>
+                    </div>
+                    <br />
+
+                    <label for="api-key">OpenAI API Key</label>
+                    <input type="text" id="api-key" placeholder="sk-..." />
+                    </label>
+                    <br />
+
+                    <label for="system">System</label>
+                    <textarea type="text" id="system"></textarea>
+                    </label>
+                    <br />
+                    
+                    <label for="chat-model">Chat Model</label>
+                    <select id="chat-model">
+                        <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                        <option value="gpt-4">gpt-4</option>
+                        <option value="gpt-4-32k">gpt-4-32k</option>
+                    </select>
+                    <br />
+
+                    <label for="comp-model">Completion Model</label>
+                    <select id="comp-model">
+                        <option value="text-davinci-003">text-davinci-003</option>
+                        <option value="text-curie-001">text-curie-001</option>
+                        <option value="text-ada-001">text-ada-001</option>
+                    </select>
+                    <br />
+                    
+                    <label for="max">Max Lenght</label>
+                    <input type="text" id="max" value="256" />
+                    <input type="range" id="max-range" min="0" max="2048" value="256" /> 
+                    <br />
+
+                    <label for="temp">Temperature</label>
+                    <input type="text" id="temp" value="0.7" />
+                    <input type="range" id="temp-range" min="0" max="100" value="70" />
+                    <br />
+
+                    <label for="pres">Presence Penalty</label>
+                    <input type="text" id="pres" value="0" />
+                    <input type="range" id="pres-range" min="-200" max="200" value="0" />
+                    <br />
+
+                    <input type="checkbox" role="switch" id="dark-mode" checked/> 
+                    <label for="switch">Dark mode</label>
+                    <br /><br />
+                </form>
+            </div>
+
+            <div class="message-list"></div>
+
+        </div>
+
+        <footer>
+            <button type="button" id="clear"><i class="far fa-trash-alt"></i></button>
+            <input type="text" id="ask" placeholder="Ask something..." />
+            <button type="button" id="send"><i class="far fa-paper-plane"></i></button>
+        </footer>
+
+    </article>
+
+    <!-- <div class="chat">
+        <button type="button" class="show"><i class="far fa-comment-alt"></i></button>
+    </div> -->
+    <script src="./js/Readability.js"></script>
+    <script src="./js/highlight.min.js"></script>
+    <script src="./js/marked.min.js"></script>
+    <script src="./popup.js"></script>
+    <script src="./js/activetab.js"></script>
+</body>
+</html>

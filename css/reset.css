@@ -1,0 +1,81 @@
+/* makes sizing simpler */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* remove default spacing and force styling */
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+}
+
+/* dark mode user-agent-styles */
+html {
+    /* color-scheme: dark light; */
+    height: 100%;
+}
+
+/* min body height */
+body {
+    min-height: 100vh;
+    height: 100%;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Roboto', sans-serif;    
+}
+
+/* responsive images */
+img, picture, svg, video, canvas {
+    display: block;
+    max-width: 100%;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+/* Create a root stacking context */
+#root, #__next {
+    isolation: isolate;
+}
+
+/* Avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+}
+
+ol, ul, li {
+	list-style: none !important;
+}
+
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+th, td {
+    text-align: left;
+    vertical-align: top;
+}
+
+.clear { 
+    clear: both; 
+} 
+.right { 
+    float: right; 
+} 
+.left { 
+    float: left; 
+}

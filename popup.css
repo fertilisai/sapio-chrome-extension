@@ -1,0 +1,245 @@
+/* makes sizing simpler */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* remove default spacing and force styling */
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+}
+
+/* dark mode user-agent-styles */
+html {
+    height: 100%;
+}
+
+/* min body height */
+body {
+    height: 600px;
+    width: 600px;
+    /* min-height: 100vh; */
+    /* height: 100%; */
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Roboto', sans-serif;    
+}
+
+/* responsive images */
+img, picture, svg, video, canvas {
+    display: block;
+    max-width: 100%;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+/* Create a root stacking context */
+#root, #__next {
+    isolation: isolate;
+}
+
+/* Avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+}
+
+ol, ul{
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+th, td {
+    text-align: left;
+    vertical-align: top;
+}
+
+.clear { 
+    clear: both; 
+} 
+.right { 
+    float: right; 
+} 
+.left { 
+    float: left; 
+}
+
+p {
+    margin: 8px !important;
+}
+
+/* Chatbox */
+.chatbox {
+    /* font-family: 'Roboto', sans-serif; */
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: fixed;
+    /* bottom: 0; */
+    /* right: 0; */
+    /* height: 700px; */
+    flex-flow: column;
+}
+
+article {
+    margin: 0 0;
+    padding: 10 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    /* margin: 0 0; */
+    /* padding: 0 0; */
+    margin-bottom: 0px !important;
+    display: flex;
+    justify-content: flex-end;
+}
+
+header button {
+    margin: 0px 5px 0px 0px;
+    padding: 5px;
+    width: 25px;
+    height: 25px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+footer {
+    /* margin: 0 0; */
+    padding: 10px 0 0 0;
+    margin-top: 0px !important;
+    display: flex;
+}
+
+footer button {
+    padding: 10px;
+    margin: 2px;
+    border-radius: 2rem;
+    width: 50px;
+    height: 45px; 
+}
+
+/* Seetings */
+.settings-menu {
+    display: none;
+    overflow-y: scroll;
+}
+
+form {
+    width: 80%;
+    margin: auto;
+}
+
+form button {
+    margin: 0px 10px;
+    padding: 10px;
+    width: 50%;
+}
+
+#ask{
+    border-radius: 2rem;
+    margin: 0 10px !important;
+}
+
+.submit {
+    display: flex;
+}
+
+/* Messages */
+.bin {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    overflow-y: scroll;
+}
+
+.message-list {
+    display: block;
+    clear: right;
+    overflow-y: scroll;
+}
+
+.message-line {
+    width: 100%;
+    overflow:hidden;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 0.75rem;
+    margin: 10px 0 0 0;
+    overflow-wrap: break-word;
+    max-width: 90%;
+}
+
+.completion {
+    border-radius: 0.75rem;
+    border: 1px solid #a5a5a5;
+    float: left;
+}
+
+.prompt {
+    background-color: #1ab2e6;
+    float: right;
+}
+
+.prompt p{
+    color: #fff;
+}
+
+code {
+    /* overflow-wrap: break-word; */
+    overflow: auto;
+    /* white-space: nowrap; */
+}
+
+code:hover + .copy {
+    display: block;
+}
+
+/* <i class="fa-regular fa-copy"></i> */
+.copy {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+/* Show Hide Chat */
+#chat {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
+
+#chat button {
+    margin: 40px 20px;
+    padding: 10px;
+    border-radius: 25px;
+    width: 45px;
+    height: 45px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
