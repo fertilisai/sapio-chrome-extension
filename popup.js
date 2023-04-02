@@ -4,7 +4,6 @@
 // - quick @ctions (summarize, translate, answer, quiz, calc, search, suggest)
 // - prompt suggestions
 // - add tabs (chat, write, draw, dictate)
-// - pluggins ?
 // - remove tips
 
 // Variables
@@ -38,7 +37,7 @@ let tips = [
     "TIP: Clear the chat for better result when you change subjects",
     "TIP: Use the arrow keys to navigate through your previous messages",
     "TIP: Enter @help to see a list of available commands (comming soon)",
-    "TIP: New features are added regularly. Stay tuned !",
+    // "TIP: New features are added regularly. Type @features to see what's new",
 ];
 
 // Set marked options
