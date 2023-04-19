@@ -70,7 +70,7 @@ marked.setOptions({
 function retriveVariables(){
     openai_api_key = localStorage.getItem("openai_api_key") || "";
     chat_model = localStorage.getItem("chat_model") || 'gpt-3.5-turbo';
-    comp_model = localStorage.getItem("comp_model") || 'text-davinci-003';
+    // comp_model = localStorage.getItem("comp_model") || 'text-davinci-003';
     max_tokens = parseInt(localStorage.getItem("max_tokens")) || 256;
     temperature = Number(localStorage.getItem("temperature")) || 0.7;
     presence = Number(localStorage.getItem("presence")) || 0;
@@ -105,7 +105,7 @@ save.addEventListener('click', updateVariables);
 function updateVariables(){
     openai_api_key = document.getElementById("api-key").value;
     chat_model = document.getElementById("chat-model").value;
-    comp_model = document.getElementById("comp-model").value;
+    // comp_model = document.getElementById("comp-model").value;
     max_tokens = parseInt(document.getElementById("max").value);
     temperature = Number(document.getElementById("temp").value);
     presence = Number(document.getElementById("pres").value);
@@ -116,7 +116,7 @@ function updateVariables(){
 
     localStorage.setItem("openai_api_key", openai_api_key);
     localStorage.setItem("chat_model", chat_model);
-    localStorage.setItem("comp_model", comp_model);
+    // localStorage.setItem("comp_model", comp_model);
     localStorage.setItem("max_tokens", max_tokens);
     localStorage.setItem("temperature", temperature);
     localStorage.setItem("presence", presence);
