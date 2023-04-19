@@ -51,7 +51,7 @@ Why not just using ChatGPT instead?
 
 - Settings (system prompt, model, temperature, max_tokens, presence_penalty)
 - Chat history
-- Prompt history (use up dans down arrow to navigate)
+- Prompt history (use up and down arrow to navigate)
 - Code highlighting
 - Copy to clipboard (click anywhere on a chat bubble to copy)
 - Dark mode
@@ -61,10 +61,10 @@ Why not just using ChatGPT instead?
 <!-- ROADMAP -->
 ## Roadmap
 
+- [x] Writer mode
 - [ ] Web access (to current tab)
 - [ ] Prompt suggestions
 - [ ] Quick actions (@summarize, @translate, etc.)
-- [ ] Writer mode
 - [ ] DALL-E support
 - [ ] Whisper support
 - [ ] ???

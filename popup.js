@@ -3,7 +3,7 @@
 // - web access
 // - quick @ctions (summarize, translate, answer, quiz, calc, search, suggest)
 // - prompt suggestions
-// - add tabs (chat, write, draw, dictate)
+// - add tabs (draw, dictate)
 // - remove tips
 
 // Variables
@@ -13,12 +13,18 @@ let comp_model;
 let max_tokens;
 let temperature;
 let presence;
+let tone;
+let format;
+let length;
 let system;
 let convo;
+let output;
+let write;
 let sent = [];
 let isChat = true;
 let msg_count = 0;
 let index = 0;
+let current_tab = "#tab-chat";
 //let text = "";
 
 let variables = {
@@ -34,9 +40,9 @@ let tips = [
     "TIP: Click anywhere on a message to copy it to clipboard",
     "TIP: Play with the model parameters in the settings menu",
     "TIP: Use Enter to send a message",
-    "TIP: Clear the chat for better result when you change subjects",
+    "TIP: For better result, clear the chat when you change subjects",
     "TIP: Use the arrow keys to navigate through your previous messages",
-    "TIP: Enter @help to see a list of available commands (comming soon)",
+    // "TIP: Enter @help to see a list of available commands (comming soon)",
     // "TIP: New features are added regularly. Type @features to see what's new",
 ];
 
@@ -68,19 +74,28 @@ function retriveVariables(){
     max_tokens = parseInt(localStorage.getItem("max_tokens")) || 256;
     temperature = Number(localStorage.getItem("temperature")) || 0.7;
     presence = Number(localStorage.getItem("presence")) || 0;
+    tone = localStorage.getItem("tone") || "neutral";
+    format = localStorage.getItem("format") || "paragraph";
+    length = localStorage.getItem("length") || "short";
     system = localStorage.getItem("system") || 'You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.';
     convo = localStorage.getItem("convo") || '[{"role": "system", "content": "'+system+'"}]';
+    write = localStorage.getItem("write") || '[{"role": "system", "content": "'+system+'"}]';
+    output = localStorage.getItem("output") || '';
 
     document.getElementById("api-key").value = openai_api_key;
     document.getElementById("chat-model").value = chat_model;
-    document.getElementById("comp-model").value = comp_model;
+    // document.getElementById("comp-model").value = comp_model;
     document.getElementById("max").value = max_tokens;
     document.getElementById("max-range").value = max_tokens;
     document.getElementById("temp").value = temperature;
     document.getElementById("temp-range").value = temperature * 100;
     document.getElementById("pres").value = presence;
     document.getElementById("pres-range").value = presence * 100;
+    document.getElementById("tone-"+tone).checked = true;
+    document.getElementById("format-"+format).checked = true;
+    document.getElementById("length-"+length).checked = true;
     document.getElementById("system").value = system;
+    document.querySelector('#output').innerHTML = output;
 };
 
 // Update Variables
@@ -106,10 +121,8 @@ function updateVariables(){
     localStorage.setItem("temperature", temperature);
     localStorage.setItem("presence", presence);
     localStorage.setItem("system", system);
-    showMessage();
+    showChat();
 };
-
-
 
 // Dark Mode
 const darkModeSwitch = document.querySelector('#dark-mode');
@@ -144,8 +157,6 @@ function loadConvo(){
     //console.log(convo_obj);
     for (let i = 1; i < convo_obj.length; i++) {
         let text = convo_obj[i].content;
-        //text = text.trim().split('\n')
-        //text = text.join('<br />');
         let type = convo_obj[i].role == "assistant" ? "completion" : "prompt";
         writeToChat(text, type);
     }
@@ -164,6 +175,7 @@ ask.addEventListener('keyup', (event) => {
             index--;
             if (index < 0) {
                 index = 0;
+                ask.value = '';
             }
             ask.value = sent[index];
         } else if (event.keyCode === 40) { // down arrow key
@@ -233,51 +245,89 @@ function quickAction(action){
     }
 };
 
-
-function sendMessage(){
-    showMessage();
-    // console.log(text);
+function checkKey() {
     if ((openai_api_key === undefined) ||
         openai_api_key == "" || 
         openai_api_key.length != 51 || 
         openai_api_key.substring(0, 3) != "sk-") {
             let text = 'Please, enter a valid OpenAI API key in the settings menu. You can get one <a href="https://beta.openai.com/" target="_blank">here</a>.';
             writeToChat(text, "completion");
-    } else {    
+            return false;
+    } else {
+        return true;
+    }
+};
+
+function sendCompletion(){
+    if (checkKey()) {
         let msg = ask.value;
         if (ask.value != '') { 
             ask.value = ''
             //console.log(msg);
-            writeToChat(msg, "prompt");
+            writeToWrite(msg);
 
-            let text = ' <div aria-busy="true"></div> ';
-            if (isChat) {  
-                writeToChat(text, "completion loading");
-                sendRequestChat(msg);
-            } else {
-                writeToChat(text, "completion loading");
+            if (current_tab == '#tab-write') {  
+                writeToWrite('...');
                 sendRequestComp(msg);
+                //sendRequestChat(msg);
+            } else {
+                let text = ' <div aria-busy="true"></div> ';
+                writeToChat(text, " loading");
+                sendRequestComp(msg);
+                //sendRequestChat(msg);
             }
-        } 
+        }
     }
 };
 
-const messages = document.querySelector('.message-list');
+function sendMessage(){
+    // console.log(text);
+    if (checkKey()) {
+        let msg = ask.value;
+        if (ask.value != '') { 
+            ask.value = ''
+            //console.log(msg);
+            if (current_tab == '#tab-write') {  
+                writeToWrite("...");
+                sendRequestChat(msg);
+            } else {
+                let text = ' <div aria-busy="true"></div> ';
+                showChat();
+                writeToChat(msg, "prompt");
+                writeToChat(text, "completion loading");
+                sendRequestChat(msg);
+            }
+        }
+    }
+};
+
+// const messages = document.querySelector('.chat-tab');
+const tabs = document.getElementById('tabs');
+const messages = document.querySelector('#tab-chat');
 const clear = document.querySelector('#clear');
 clear.addEventListener('click', clearMessage);
 
 function clearMessage(){
     sent = [];
-    showMessage();
-    convo = '[{"role": "system", "content": "'+system+'"}]';
-    localStorage.setItem("convo", convo);
-    messages.innerHTML = '';
-    let randomTip = tips[Math.floor(Math.random() * tips.length)];
-    writeToChat(randomTip, "completion");
+
+    if (current_tab == '#tab-write') {
+        write = '[{"role": "system", "content": "'+system+'"}]';
+        localStorage.setItem("write", write);
+        output = '';
+        document.querySelector('#output').innerHTML = output;
+        localStorage.setItem("output", output);
+    } else {
+        showChat();
+        convo = '[{"role": "system", "content": "'+system+'"}]';
+        localStorage.setItem("convo", convo);
+        messages.innerHTML = '';
+        let randomTip = tips[Math.floor(Math.random() * tips.length)];
+        writeToChat(randomTip, "completion");
+    }
 };
 
 // Chat Functions
-function writeToChat (text, type) {
+function writeToChat(text, type) {
     // console.log(text);
     text = marked.parse(text);
     // console.log(text);
@@ -302,30 +352,67 @@ function writeToChat (text, type) {
     addListenerOnMessageClick('msg-'+msg_count);
 }
 
-// Settings Functions
-const cancel = document.querySelector('#cancel');
-cancel.addEventListener('click', toggleSettings);
 
-const settings = document.querySelector('#settings');
-settings.addEventListener('click', toggleSettings);
-
-function toggleSettings(){
-    if (document.querySelector('.settings-menu').style.display == "none") {
-        document.querySelector('.message-list').style.display = "none";
-        document.querySelector('.settings-menu').style.display = "block";
-        retriveVariables();
-    } else {
-        document.querySelector('.settings-menu').style.display = "none";
-        document.querySelector('.message-list').style.display=  "block";
-    }
+// Write Functions
+function writeToWrite(text) {
+    // console.log(text);
+    document.querySelector('#output').innerHTML = text;
 };
 
-function showMessage(){
-    if (document.querySelector('.settings-menu').style.display == "block") {
-        document.querySelector('.settings-menu').style.display = "none";
-        document.querySelector('.message-list').style.display = "block";
+// Settings Functions
+const cancel = document.querySelector('#cancel');
+cancel.addEventListener('click', showChat);
+
+// Change active tab
+const tabLinks = document.querySelectorAll('nav a');
+const tabContent = document.querySelectorAll('.tab');
+
+tabLinks.forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    tabLinks.forEach(function(tab) {
+      tab.classList.remove('active');
+    });
+
+    this.classList.add('active');
+    current_tab = this.getAttribute('href');
+    //console.log(current_tab);
+
+    if (current_tab == '#tab-write') {
+        document.getElementById('ask').placeholder='Write about...';
+    } else {
+        document.getElementById('ask').placeholder='Ask something...';
     }
-    //retriveVariables();
+    
+    tabContent.forEach(function(content) {
+      content.classList.remove('active');
+    });
+    
+    const target = this.getAttribute('href');
+    document.querySelector(target).classList.add('active');
+
+    messages.scrollTop = messages.scrollHeight;
+  });
+});
+
+function showChat(){
+    tabLinks.forEach(function(tab) {
+        tab.classList.remove('active');
+    });
+
+    // Add the 'active' class to the first tab link
+    tabLinks[0].classList.add('active');
+    current_tab = tabLinks[0].getAttribute('href');
+    // Hide all tab content
+    tabContent.forEach(function(content) {
+        content.classList.remove('active');
+    });
+
+    // Show the first tab content
+    const target = tabLinks[0].getAttribute('href');
+    document.querySelector(target).classList.add('active');
+    messages.scrollTop = messages.scrollHeight;
 };
 
 // Slider
@@ -353,19 +440,49 @@ function addListenerOnMessageClick(id) {
 
 // Update convo
 function addPrompt(prompt) {
-    convo = convo.slice(0,-1);
-    convo = convo + ',{"role": "user", "content": '+ JSON.stringify(prompt) +' }]';
-    localStorage.setItem("convo", convo)
-};       
+    if (current_tab == '#tab-write') {
+        write = '[{"role": "system", "content": "You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible."},{"role": "user", "content": '+ JSON.stringify(prompt) +' }]';
+    } else {
+        convo = convo.slice(0,-1);
+        convo = convo + ',{"role": "user", "content": '+ JSON.stringify(prompt) +' }]';
+        localStorage.setItem("convo", convo)
+    }
+    // console.log(convo);
+    // console.log(write);
+};
 
 function addCompletion(completion) {
-    convo = convo.slice(0,-1);
-    convo = convo + ',{"role": "assistant", "content": '+ JSON.stringify(completion) +' }]';
-    localStorage.setItem("convo", convo)
+    if (current_tab == '#tab-write') {
+        localStorage.setItem("output", completion)
+    } else {
+        convo = convo.slice(0,-1);
+        convo = convo + ',{"role": "assistant", "content": '+ JSON.stringify(completion) +' }]';
+        localStorage.setItem("convo", convo)
+    }
+    // console.log(convo);
+    // console.log(write);
+};
+
+// Completion settings
+function writePrompt(prompt) {
+    tone =  document.querySelector('input[name="tone"]:checked').value;
+    format = document.querySelector('input[name="format"]:checked').value;
+    length = document.querySelector('input[name="length"]:checked').value;
+    localStorage.setItem("tone", tone);
+    localStorage.setItem("format", format);
+    localStorage.setItem("length", length);
+    prompt = 'Write a '+length+'length '+format+' about '+prompt+' with a '+tone+' tone.';
+    return prompt;
 };
 
 // API resquest to openai (completion)
 let sendRequestComp = async function (prompt) {
+
+    if (current_tab == '#tab-write') {
+        prompt = writePrompt(prompt);
+    }
+    //console.log(convo);
+
     let response = await fetch('https://api.openai.com/v1/completions', {
         method: 'POST',
         headers: {
@@ -394,18 +511,30 @@ function handleResponseComp(response) {
     let answer = response.choices[0].text;
     //console.log(JSON.stringify(answer));
     addCompletion(answer);
-    let text = answer.trim().split('\n')
+    let text = answer//.trim().split('\n')
+    // text = text.join('<br />');
     //writeCompletion(text);
-    text = text.join('<br />');
-    writeToChat(text, "edit");
+    if (current_tab == '#tab-write') {
+        writeToWrite(text);
+    } else {
+        //text = text.join('<br />');
+        writeToChat(text, "edit");
+    }
 };
 
 // API resquest to openai (chat)
 let sendRequestChat = async function (prompt) {
 
-    addPrompt(prompt);
     //console.log(convo);
-    let msgs = JSON.parse(convo);
+    let msgs;
+    if (current_tab == '#tab-write') {
+        prompt = writePrompt(prompt);
+        addPrompt(prompt);
+        msgs = JSON.parse(write);
+    } else {
+        addPrompt(prompt);
+        msgs = JSON.parse(convo);
+    }
     //console.log(msgs);
 
     let response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -434,13 +563,13 @@ let sendRequestChat = async function (prompt) {
 function handleResponseChat(response) {
     // console.log(response);
     let answer = response.choices[0].message.content;
-    //console.log(JSON.stringify(answer));
     addCompletion(answer);
-    // let text = answer.trim().split('\n')
-    // text = text.join('<br />');
     let text = answer//.trim();
-    // text = marked.parse(text);
-    writeToChat(text, "edit");
+    if (current_tab == '#tab-write') {
+        writeToWrite(text);
+    } else {
+        writeToChat(text, "edit");
+    }
 };
 
 // On Load
@@ -454,6 +583,8 @@ window.addEventListener('load', function() {
     slider("max", "max-range");
     slider("temp", "temp-range", 100);
     slider("pres", "pres-range", 100);
+    showChat();
+    document.querySelector('#ask').focus();
 });
 
 // function showChat(){

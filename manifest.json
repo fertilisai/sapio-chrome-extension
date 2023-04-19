@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Sapio",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Sapio - access the power of ChatGPT everywhere",
   "icons": {
     "16": "assets/favicon-16x16.png",
@@ -12,4 +12,5 @@
     "default_popup": "popup.html"
   },
   "permissions": ["activeTab", "scripting", "storage"]
+  
 }

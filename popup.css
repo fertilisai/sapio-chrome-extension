@@ -73,10 +73,12 @@ th, td {
 
 .clear { 
     clear: both; 
-} 
+}
+
 .right { 
     float: right; 
-} 
+}
+
 .left { 
     float: left; 
 }
@@ -94,7 +96,7 @@ p {
     position: fixed;
     /* bottom: 0; */
     /* right: 0; */
-    /* height: 700px; */
+    /* height: 600px; */
     flex-flow: column;
 }
 
@@ -111,8 +113,6 @@ header {
     /* margin: 0 0; */
     /* padding: 0 0; */
     margin-bottom: 0px !important;
-    display: flex;
-    justify-content: flex-end;
 }
 
 header button {
@@ -123,6 +123,11 @@ header button {
     display: flex; 
     justify-content: center; 
     align-items: center;
+}
+
+li {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;;
 }
 
 footer {
@@ -141,11 +146,6 @@ footer button {
 }
 
 /* Seetings */
-.settings-menu {
-    display: none;
-    overflow-y: scroll;
-}
-
 form {
     width: 80%;
     margin: auto;
@@ -167,7 +167,7 @@ form button {
 }
 
 /* Messages */
-.bin {
+#tabs {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -175,11 +175,30 @@ form button {
     overflow-y: scroll;
 }
 
-.message-list {
+/* Hide all tabs by default */
+.tab {
+    display: none;
+}
+
+/* Show the active tab */
+.tab.active {
     display: block;
-    clear: right;
+}
+
+/* Show the tab that matches the URL fragment */
+.tab:target {
+    display: block;
+}
+
+#tab-chat {
+    /* display: block; */
+    /* clear: right; */
     overflow-y: scroll;
 }
+
+/* #tab-settings {
+    overflow-y: scroll;
+} */
 
 .message-line {
     width: 100%;
@@ -199,6 +218,53 @@ form button {
     border: 1px solid #a5a5a5;
     float: left;
 }
+
+.section {
+    padding: 10px;
+    border-radius: 0.75rem;
+    margin: 10px 0 0 0;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    border: 1px solid #a5a5a5;
+}
+
+.section label,
+.section input {
+    display: inline-block;
+}
+
+.section input[type="radio"] {
+    display: none;
+}
+
+.section input[type="radio"]:checked+label,
+.Checked+label {
+    background: #1ab2e6;
+    color: #fff;
+}
+
+.section label {
+    padding: 5px;
+    margin: 5px 5px 5px 0;
+    border-radius: 0.75rem;
+    font-size: 15px;
+    /* font-weight: bold; */
+    border: 1px solid #1ab2e6;
+    color: #1ab2e6;
+    cursor: pointer;
+    z-index: 90;
+}
+
+.section label:hover {
+    background: #1A4050;
+}
+
+/* .option {
+    padding: 10px;
+    border-radius: 0.75rem;
+    margin: 10px 0 0 0;
+    border: 1px solid #1ab2e6;
+} */
 
 .prompt {
     background-color: #1ab2e6;
@@ -228,18 +294,18 @@ code:hover + .copy {
 }
 
 /* Show Hide Chat */
-#chat {
+/* #chat {
     display: none;
     position: fixed;
     bottom: 0;
     right: 0;
-}
+} */
 
-#chat button {
+/* #chat button {
     margin: 40px 20px;
     padding: 10px;
     border-radius: 25px;
     width: 45px;
     height: 45px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
+} */

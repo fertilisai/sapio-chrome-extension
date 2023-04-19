@@ -19,13 +19,75 @@
     <article>
 
         <header>
-            <button type="button" id="settings"><i class="fas fa-cog"></i></button>
-            <!-- <button type="button" class="hide"><i class="fas fa-times"></i></button> -->
-        </header>
-        
-        <div class="bin">
+            <nav>
+                <div class="left">
+                    <ul>
+                        <li><a href="#tab-chat" class="active">Chat</a></li>
+                        <li><a href="#tab-write">Write</a></li>
+                        <!-- <li><a href="#tab-draw">Draw</a></li> -->
+                    </ul>
+                </div>
 
-            <div class="settings-menu" style="display: none;"> 
+                <div class="right">
+                    <a href="#tab-settings"><i class="fas fa-cog"></i></button></a>
+                </div>
+            </nav>
+        </header>
+
+        <div id="tabs">
+
+            <div class="tab" id="tab-chat"></div>
+
+            <div class="tab" id="tab-write">
+                <div class="section">
+                    <p>Tone</p>
+                        <input type="radio" id="tone-neutral" name="tone" value="neutral">
+                        <label for="tone-neutral">Neutral</label>
+                        <input type="radio" id="tone-professionnal" name="tone" value="professionnal">
+                        <label for="tone-professional">Professionnal</label>
+                        <input type="radio" id="tone-journalistic" name="tone" value="journalistic">
+                        <label for="tone-journalistic">Journalistic</label>
+                        <input type="radio" id="tone-enthusiastic" name="tone" value="enthusiastic">
+                        <label for="tone-enthusiastic">Enthusiastic</label>
+                        <input type="radio" id="tone-friendly" name="tone" value="friendly">
+                        <label for="tone-friendly">Friendly</label>
+                        <input type="radio" id="tone-funny" name="tone" value="funny">
+                        <label for="tone-funny">Funny</label>
+                </div>
+                <div class="section">
+                    <p>Format</p>
+                        <input type="radio" id="format-paragraph" name="format" value="paragraph">
+                        <label for="format-paragraph">Paragraph</label>
+                        <input type="radio" id="format-email" name="format" value="email">
+                        <label for="format-email">Email</label>
+                        <input type="radio" id="format-article" name="format" value="article">
+                        <label for="format-article">Article</label>
+                        <input type="radio" id="format-social media post" name="format" value="social media post">
+                        <label for="format-social media post">Social media post</label>
+                        <input type="radio" id="format-idea list" name="format" value="idea list">
+                        <label for="format-idea list">Ideas</label>
+                    <p></p>
+                </div>
+                <div class="section">
+                    <p>Length</p>
+                        <input type="radio" id="length-short" name="length" value="short">
+                        <label for="length-short">Short</label>
+                        <input type="radio" id="length-medium" name="length" value="medium">
+                        <label for="length-medium">Medium</label>
+                        <input type="radio" id="length-long" name="length" value="long">
+                        <label for="length-long">Long</label>
+                </div>
+                <div class="section">
+                    <p>Text Ouput</p>
+                    <div id="text-output">
+                        <textarea type="text" id="output" rows="12" ></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="tab" id="tab-draw">draw</div> -->
+
+            <div class="tab" id="tab-settings"> 
                 <form>
                     <br />
                     <div class="submit">
@@ -52,13 +114,13 @@
                     </select>
                     <br />
 
-                    <label for="comp-model">Completion Model</label>
+                    <!-- <label for="comp-model">Completion Model</label>
                     <select id="comp-model">
                         <option value="text-davinci-003">text-davinci-003</option>
                         <option value="text-curie-001">text-curie-001</option>
                         <option value="text-ada-001">text-ada-001</option>
                     </select>
-                    <br />
+                    <br /> -->
                     
                     <label for="max">Max Lenght</label>
                     <input type="text" id="max" value="256" />
@@ -81,13 +143,12 @@
                 </form>
             </div>
 
-            <div class="message-list"></div>
-
         </div>
 
         <footer>
             <button type="button" id="clear"><i class="far fa-trash-alt"></i></button>
             <input type="text" id="ask" placeholder="Ask something..." />
+            <!-- <i class="far fa-microphone"></i> -->
             <button type="button" id="send"><i class="far fa-paper-plane"></i></button>
         </footer>
 
