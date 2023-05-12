@@ -8,7 +8,6 @@
     <link rel="icon" type="image/png" sizes="128x128" href="./assets/favicon-128x128.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16x16.png">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" /> -->
     <link rel="stylesheet" href="./css/fontawesome.min.css" />
     <link rel="stylesheet" href="./css/regular.min.css" />
     <link rel="stylesheet" href="./css/solid.min.css" />
@@ -28,11 +27,12 @@
                         <li><a href="#tab-chat" class="active">Chat</a></li>
                         <li><a href="#tab-write">Write</a></li>
                         <!-- <li><a href="#tab-draw">Draw</a></li> -->
+                        <!-- <li><a href="#tab-speak">Speak/a></li> -->
                     </ul>
                 </div>
 
                 <div class="right">
-                    <a href="#tab-settings"><i class="fas fa-cog"></i></button></a>
+                    <a href="#tab-settings"><i class="fas fa-cog"></i></a>
                 </div>
             </nav>
         </header>
@@ -69,6 +69,14 @@
                         <label for="format-social media post">Social media post</label>
                         <input type="radio" id="format-idea list" name="format" value="idea list">
                         <label for="format-idea list">Ideas</label>
+                        <input type="radio" id="format-cover letter" name="format" value="cover letter">
+                        <label for="format-cover letter">Cover letter</label>
+                        <input type="radio" id="format-job description" name="format" value="job description">
+                        <label for="format-job description">Job description</label>
+                        <input type="radio" id="format-technical note" name="format" value="technical note">
+                        <label for="format-technical note">Technical note</label>
+                        <input type="radio" id="format-support ticket" name="format" value="support ticket">
+                        <label for="format-support ticket">Support ticket</label>
                     <p></p>
                 </div>
                 <div class="section">
@@ -81,14 +89,45 @@
                         <label for="length-long">Long</label>
                 </div>
                 <div class="section">
-                    <p>Text Ouput</p>
+                    <p>Language</p>
+                        <input type="radio" id="lang-english" name="lang" value="english">
+                        <label for="lang-english">English</label>
+                        <input type="radio" id="lang-spanish" name="lang" value="spanish">
+                        <label for="lang-spanish">Spanish</label>
+                        <input type="radio" id="lang-french" name="lang" value="french">
+                        <label for="lang-french">French</label>
+                        <input type="radio" id="lang-portuguese" name="lang" value="portuguese">
+                        <label for="lang-portuguese">Portuguese</label>
+                        <input type="radio" id="lang-german" name="lang" value="german">
+                        <label for="lang-german">German</label>
+                        <input type="radio" id="lang-italian" name="lang" value="italian">
+                        <label for="lang-italian">Italian</label>
+                        <input type="radio" id="lang-mandarin" name="lang" value="mandarin">
+                        <label for="lang-mandarin">Mandarin</label>
+                        <input type="radio" id="lang-hindi" name="lang" value="hindi">
+                        <label for="lang-hindi">Hindi</label>
+                        <input type="radio" id="lang-arabic" name="lang" value="arabic">
+                        <label for="lang-arabic">Arabic</label>
+                        <input type="radio" id="lang-russian" name="lang" value="russian">
+                        <label for="lang-russian">Russian</label>
+                        <input type="radio" id="lang-japanese" name="lang" value="japanese">
+                        <label for="lang-japanese">Japanese</label>
+                        <input type="radio" id="lang-korean" name="lang" value="korean">
+                        <label for="lang-korean">Korean</label>                        
+                </div>
+                <div class="section">
+                    <div class="left"><p>Text Ouput</p></div>
+                    <div class="right">
+                        <div class="copy"><i class="far fa-copy"></i></div>
+                    </div>
                     <div id="text-output">
                         <textarea type="text" id="output" rows="12" ></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- <div class="tab" id="tab-draw">draw</div> -->
+            <!-- <div class="tab" id="tab-draw"></div> -->
+            <!-- <div class="tab" id="tab-speak"></div> -->
 
             <div class="tab" id="tab-settings"> 
                 <form>

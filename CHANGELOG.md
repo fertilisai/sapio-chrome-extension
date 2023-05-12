@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.0.3
+
+### Added or Changed
+
+- Language support in writer mode
+- New formats in writer mode
+
 ## v0.0.2
 
 ### Added or Changed

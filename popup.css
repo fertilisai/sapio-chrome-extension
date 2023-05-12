@@ -19,7 +19,7 @@ html {
 /* min body height */
 body {
     height: 600px;
-    width: 600px;
+    width: 580px;
     /* min-height: 100vh; */
     /* height: 100%; */
     line-height: 1.5;
@@ -259,6 +259,22 @@ form button {
     background: #1A4050;
 }
 
+.copy {
+    padding: 5px;
+    border-radius: 0.6rem;
+    max-width: 100%;
+    border: 1px solid transparent;
+}
+
+.copy:hover {
+    border: 1px solid #a5a5a5;
+}
+
+.copy:active {
+    background-color: #1ab2e6;
+}
+
+
 /* .option {
     padding: 10px;
     border-radius: 0.75rem;
@@ -271,7 +287,7 @@ form button {
     float: right;
 }
 
-.prompt p{
+.prompt p {
     color: #fff;
 }
 
@@ -285,13 +301,13 @@ code:hover + .copy {
     display: block;
 }
 
-/* <i class="fa-regular fa-copy"></i> */
-.copy {
+
+/* .copy {
     display: none;
     position: absolute;
     top: 0;
     right: 0;
-}
+} */
 
 /* Show Hide Chat */
 /* #chat {

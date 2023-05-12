@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/fertilisai/sapio-chrome-extension">
-    <img src="assets/apple-touch-icon.png" alt="Logo" width="128" height="128">
+    <img src="assets/favicon-128x128.png" alt="Logo" width="128" height="128">
   </a>
 
   <h2 align="center">Sapio</h2>
@@ -58,12 +58,10 @@ Why not just using ChatGPT instead?
 ## Roadmap
 
 - [x] Writer mode
+- [x] Multi language support
 - [ ] Web access (to current tab)
-- [ ] Prompt suggestions
 - [ ] Quick actions (@summarize, @translate, etc.)
-- [ ] DALL-E support
-- [ ] Whisper support
-- [ ] ???
+- [ ] Prompt suggestions
 
 <!-- LICENSE -->
 

@@ -16,6 +16,7 @@ let presence;
 let tone;
 let format;
 let length;
+let lang;
 let system;
 let convo;
 let output;
@@ -65,7 +66,6 @@ marked.setOptions({
     xhtml: false
 });
 
-
 // Initialize Variables
 function retriveVariables(){
     openai_api_key = localStorage.getItem("openai_api_key") || "";
@@ -77,7 +77,8 @@ function retriveVariables(){
     tone = localStorage.getItem("tone") || "neutral";
     format = localStorage.getItem("format") || "paragraph";
     length = localStorage.getItem("length") || "short";
-    system = localStorage.getItem("system") || 'You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.';
+    lang = localStorage.getItem("lang") || "english";
+    system = localStorage.getItem("system") || 'You are a helpful assistant. Answer as concisely and as truthfully possible.';
     convo = localStorage.getItem("convo") || '[{"role": "system", "content": "'+system+'"}]';
     write = localStorage.getItem("write") || '[{"role": "system", "content": "'+system+'"}]';
     output = localStorage.getItem("output") || '';
@@ -94,6 +95,7 @@ function retriveVariables(){
     document.getElementById("tone-"+tone).checked = true;
     document.getElementById("format-"+format).checked = true;
     document.getElementById("length-"+length).checked = true;
+    document.getElementById("lang-"+lang).checked = true;
     document.getElementById("system").value = system;
     document.querySelector('#output').innerHTML = output;
 };
@@ -323,7 +325,13 @@ function clearMessage(){
         messages.innerHTML = '';
         let randomTip = tips[Math.floor(Math.random() * tips.length)];
         writeToChat(randomTip, "completion");
+        msg_count = 0;
+        matches = Array.from(document.querySelectorAll('[id^=msg-]'));
+        matches.forEach(function(match) {
+            match.removeEventListener('click', copyToClipboard);
+        });
     }
+
 };
 
 // Chat Functions
@@ -396,7 +404,7 @@ tabLinks.forEach(function(link) {
   });
 });
 
-function showChat(){
+function showChat() {
     tabLinks.forEach(function(tab) {
         tab.classList.remove('active');
     });
@@ -429,14 +437,31 @@ function slider(id, id_range, factor=1) {
     };
 };
 
+// Copy button
+const copy = document.querySelector('.copy');
+copy.addEventListener('click', copyToClipboard);
+
+function copyToClipboard() {
+    navigator.clipboard.writeText(output)
+};
+
 function addListenerOnMessageClick(id) {
     const id_val = document.getElementById(id);
-    id_val.addEventListener('click', function() {
+    id_val.addEventListener('click', function copyToClipboard() {
         let text = id_val.innerText;
         // Copy to clipboard
-        navigator.clipboard.writeText(text);
-    }
-)};
+        navigator.clipboard.writeText(text)
+        // .then(
+        //     () => {
+        //       console.log('Async: Copying to clipboard was successful!');
+        //       // success
+        //     },
+        //     () => {
+        //       console.log('Async: Could not copy text: ', text);
+        //       // failure
+        //     });
+    });
+};
 
 // Update convo
 function addPrompt(prompt) {
@@ -468,10 +493,12 @@ function writePrompt(prompt) {
     tone =  document.querySelector('input[name="tone"]:checked').value;
     format = document.querySelector('input[name="format"]:checked').value;
     length = document.querySelector('input[name="length"]:checked').value;
+    lang = document.querySelector('input[name="lang"]:checked').value;
     localStorage.setItem("tone", tone);
     localStorage.setItem("format", format);
     localStorage.setItem("length", length);
-    prompt = 'Write a '+length+'length '+format+' about '+prompt+' with a '+tone+' tone.';
+    localStorage.setItem("lang", lang);
+    prompt = 'Write a '+length+'length '+format+' about '+prompt+' with a '+tone+' tone in '+lang+'.';
     return prompt;
 };
 
