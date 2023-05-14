@@ -63,6 +63,15 @@ Why not just using ChatGPT instead?
 - [ ] Quick actions (@summarize, @translate, etc.)
 - [ ] Prompt suggestions
 
+<!-- ACKNOWLEDGEMENT -->
+
+## Acknowledgement
+
+- [Pico.css](https://picocss.com/)
+- [Marked.js](https://marked.js.org/)
+- [Highlight.js](https://highlightjs.org/)
+- [Font Awesome](https://fontawesome.com/)
+
 <!-- LICENSE -->
 
 ## License

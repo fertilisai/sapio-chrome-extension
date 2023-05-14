@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="test">Append</div>
+
+    <button onclick="myFunction()">Append</button>
+
+    <script>
+      let msg_count = 1;
+      let type = "prompt";
+
+      let chain = function (target) {
+        return {
+          createElement: function (name, ids, classes, value) {
+            var el = document.createElement(name);
+            if (ids !== undefined && ids !== "") {
+              el.setAttribute("id", ids);
+            }
+            if (classes !== undefined && classes !== "") {
+              el.setAttribute("class", classes);
+            }
+            if (value !== undefined) {
+              el.innerHTML = value;
+            } else {
+              el.innerHTML = "";
+            }
+            target.appendChild(el);
+            return chain(el);
+          },
+        };
+      };
+
+      function myFunction() {
+        let classes = "message " + type;
+        let ids = "msg-" + msg_count;
+
+        const target = document.getElementById("test");
+        chain(target).createElement("div", ids, classes).createElement("p");
+        //target.innerText = 'hello';
+        const target2 = target.querySelector("p");
+        target2.innerText = "hello !";
+      }
+    </script>
+
+    <!-- <script>
+      let type = "prompt";
+      let msg_count = "1";
+      let text = "hello world!";
+
+      html_str =
+        '<div class="message ' +
+        type +
+        '" id="msg-' +
+        msg_count +
+        '"><p>' +
+        text +
+        "</p></div>";
+
+      html_str = "<p>hello world!</p>";
+      //   const node = new DOMParser().parseFromString(html_str, "text/html").body
+      //     .firstElementChild;
+
+      //   const node = document.createRange().createContextualFragment(html_str);
+    </script> -->
+
+    <!-- <script>
+      const table = document.createElement(`table`);
+      const tbody = document.createElement(`tbody`);
+      table.appendChild(tbody);
+
+      const range = document.createRange();
+      range.selectNodeContents(tbody);
+      const node = range.createContextualFragment(`<tr><td>Foo</td></tr>`);
+    </script> -->
+
+    <!-- <script>
+      /**
+       * @param {String} HTML representing a single element
+       * @return {Element}
+       */
+      function htmlToElement(html) {
+        var template = document.createElement("template");
+        html = html.trim(); // Never return a text node of whitespace as the result
+        template.innerHTML = html;
+        return template.content.firstChild;
+      }
+
+      var td = htmlToElement("<td>foo</td>"),
+        div = htmlToElement(
+          "<div><span>nested</span> <span>stuff</span></div>"
+        );
+
+      /**
+       * @param {String} HTML representing any number of sibling elements
+       * @return {NodeList}
+       */
+      function htmlToElements(html) {
+        var template = document.createElement("template");
+        template.innerHTML = html;
+        return template.content.childNodes;
+      }
+
+      var rows = htmlToElements("<tr><td>foo</td></tr><tr><td>bar</td></tr>");
+    </script> -->
+  </body>
+</html>
+
+<!-- https://css-tricks.com/snippets/javascript/inject-html-from-a-string-of-html/ -->
+<!-- https://grrr.tech/posts/create-dom-node-from-html-string/ -->
+<!-- https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro/35385518#35385518 -->
+<!-- https://gomakethings.com/four-different-ways-to-inject-text-and-html-into-an-element-with-vanilla-javascript/ -->
+
+<!-- var text = document.createTextNode('<p>Stuff</p>'); -->
+<!-- document.body.appendChild(text); -->
