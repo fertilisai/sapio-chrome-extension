@@ -59,6 +59,7 @@ Why not just using ChatGPT instead?
 
 - [x] Writer mode
 - [x] Multi language support
+- [x] Draw mode (Dall-E support)
 - [ ] Web access (to current tab)
 - [ ] Quick actions (@summarize, @translate, etc.)
 - [ ] Prompt suggestions
@@ -67,10 +68,13 @@ Why not just using ChatGPT instead?
 
 ## Acknowledgement
 
+- [OpenAI](https://openai.com/)
 - [Pico.css](https://picocss.com/)
 - [Marked.js](https://marked.js.org/)
+- [PurifyCSS](https://github.com/purifycss/purifycss)
 - [Highlight.js](https://highlightjs.org/)
 - [Font Awesome](https://fontawesome.com/)
+- [Readability](https://github.com/mozilla/readability)
 
 <!-- LICENSE -->
 

@@ -1,9 +1,8 @@
 // TODO:
-// - fix gpt4 (fallback)
 // - web access
-// - quick @ctions (summarize, translate, answer, quiz, calc, search, suggest)
+// - quick #actions (summarize, translate, answer, quiz, calc, search, suggest)
 // - prompt suggestions
-// - add tabs (draw, dictate)
+// - add tabs (speak)
 // - remove tips
 
 // Variables
@@ -20,6 +19,7 @@ let lang;
 let system;
 let convo;
 let output;
+let image_url;
 let write;
 let sent = [];
 let isChat = true;
@@ -34,7 +34,9 @@ let variables = {
   comp_model: "text-davinci-003",
   max_tokens: 256,
   temperature: 0.7,
+  top_p: 1,
   presence: 0,
+  frequence: 0,
 };
 
 let tips = [
@@ -73,6 +75,8 @@ function retriveVariables() {
   // comp_model = localStorage.getItem("comp_model") || 'text-davinci-003';
   max_tokens = parseInt(localStorage.getItem("max_tokens")) || 256;
   temperature = Number(localStorage.getItem("temperature")) || 0.7;
+  top_p = Number(localStorage.getItem("top_p")) || 1;
+  frequence = Number(localStorage.getItem("frequence")) || 0;
   presence = Number(localStorage.getItem("presence")) || 0;
   tone = localStorage.getItem("tone") || "neutral";
   format = localStorage.getItem("format") || "paragraph";
@@ -88,6 +92,7 @@ function retriveVariables() {
     localStorage.getItem("write") ||
     '[{"role": "system", "content": "' + system + '"}]';
   output = localStorage.getItem("output") || "";
+  image_url = localStorage.getItem("image_url") || "";
 
   document.getElementById("api-key").value = openai_api_key;
   document.getElementById("chat-model").value = chat_model;
@@ -96,6 +101,10 @@ function retriveVariables() {
   document.getElementById("max-range").value = max_tokens;
   document.getElementById("temp").value = temperature;
   document.getElementById("temp-range").value = temperature * 100;
+  document.getElementById("top-p").value = top_p;
+  document.getElementById("top-p-range").value = top_p * 100;
+  document.getElementById("freq").value = frequence;
+  document.getElementById("freq-range").value = frequence * 100;
   document.getElementById("pres").value = presence;
   document.getElementById("pres-range").value = presence * 100;
   document.getElementById("tone-" + tone).checked = true;
@@ -104,6 +113,7 @@ function retriveVariables() {
   document.getElementById("lang-" + lang).checked = true;
   document.getElementById("system").value = system;
   document.querySelector("#output").innerHTML = output;
+  writeToDraw(image_url);
 }
 
 // Update Variables
@@ -116,6 +126,8 @@ function updateVariables() {
   // comp_model = document.getElementById("comp-model").value;
   max_tokens = parseInt(document.getElementById("max").value);
   temperature = Number(document.getElementById("temp").value);
+  top_p = Number(document.getElementById("top-p").value);
+  frequence = Number(document.getElementById("freq").value);
   presence = Number(document.getElementById("pres").value);
   if (system !== document.getElementById("system").value) {
     system = document.getElementById("system").value;
@@ -127,6 +139,8 @@ function updateVariables() {
   // localStorage.setItem("comp_model", comp_model);
   localStorage.setItem("max_tokens", max_tokens);
   localStorage.setItem("temperature", temperature);
+  localStorage.setItem("top_p", top_p);
+  localStorage.setItem("frequence", frequence);
   localStorage.setItem("presence", presence);
   localStorage.setItem("system", system);
   showChat();
@@ -231,7 +245,12 @@ function quickAction(action) {
       ask.value = "";
       writeToChat(text, "completion");
       break;
-    case "@summarize":
+    case "@summary":
+      chrome.runtime.sendMessage({ action: "getPageContent" }, (response) => {
+        const { pageTitle, pageContent } = response.pageContent;
+        const fullPrompt = `${pageTitle}\n\n${pageContent}\n\n${prompt}`;
+      });
+
       let html = getActiveTab();
       let article = new Readability(document).parse(html);
       text = "summarize:" + article.textContent;
@@ -259,38 +278,21 @@ function checkKey() {
   }
 }
 
-function sendCompletion() {
-  if (checkKey()) {
-    let msg = DOMPurify.sanitize(ask.value);
-    if (ask.value != "") {
-      ask.value = "";
-      //console.log(msg);
-      writeToWrite(msg);
-
-      if (current_tab == "#tab-write") {
-        writeToWrite("...");
-        sendRequestComp(msg);
-        //sendRequestChat(msg);
-      } else {
-        let text = ' <div aria-busy="true"></div> ';
-        writeToChat(text, " loading");
-        sendRequestComp(msg);
-        //sendRequestChat(msg);
-      }
-    }
-  }
-}
-
 function sendMessage() {
   // console.log(text);
   if (checkKey()) {
     let msg = DOMPurify.sanitize(ask.value);
     if (ask.value != "") {
+      // clear input
       ask.value = "";
       //console.log(msg);
+
       if (current_tab == "#tab-write") {
         writeToWrite("...");
         sendRequestChat(msg);
+      } else if (current_tab == "#tab-draw") {
+        document.querySelector("#tab-draw").innerText = "...";
+        sendRequestDraw(msg);
       } else {
         let text = ' <div aria-busy="true"></div> ';
         showChat();
@@ -317,6 +319,10 @@ function clearMessage() {
     output = "";
     document.querySelector("#output").innerHTML = output;
     localStorage.setItem("output", output);
+  } else if (current_tab == "#tab-draw") {
+    image_url = "";
+    document.querySelector("#tab-draw").innerHTML = image_url;
+    localStorage.setItem("image_url", image_url);
   } else {
     showChat();
     convo = '[{"role": "system", "content": "' + system + '"}]';
@@ -358,7 +364,7 @@ let chain = function (target) {
 // Chat Functions
 function writeToChat(text, type) {
   // console.log(text);
-  raw = text;
+  let raw = text;
   text = marked.parse(DOMPurify.sanitize(text));
   // console.log(text);
   let message;
@@ -383,7 +389,7 @@ function writeToChat(text, type) {
 
     let ids = "msg-" + msg_count;
     let classes = "message " + type;
-    chain(message).createElement("div", ids, classes).createElement("p");
+    new chain(message).createElement("div", ids, classes).createElement("p");
 
     if (type == "prompt") {
       message.querySelector("p").innerText = raw;
@@ -403,10 +409,29 @@ function writeToChat(text, type) {
   addListenerOnMessageClick("msg-" + msg_count);
 }
 
-// Write Functions
+// Write Function
 function writeToWrite(text) {
   // console.log(text);
   document.querySelector("#output").innerText = text;
+}
+
+// Draw Function
+function writeToDraw(url) {
+  if (url != "") {
+    // console.log(url);
+    // insert image from url in #tab-draw
+    let image = document.createElement("img");
+    image.alt = "Dall-E image";
+    image.width = "430";
+    image.height = "430";
+    //image.style = "align-self:center";
+    image.src = url;
+    image.classList.add("image");
+    let draw = document.querySelector("#tab-draw");
+    draw.innerHTML = "";
+    draw.appendChild(image);
+    localStorage.setItem("image_url", url);
+  }
 }
 
 // Settings Functions
@@ -431,6 +456,10 @@ tabLinks.forEach(function (link) {
 
     if (current_tab == "#tab-write") {
       document.getElementById("ask").placeholder = "Write about...";
+    } else if (current_tab == "#tab-draw") {
+      document.getElementById("ask").placeholder = "Draw about...";
+    } else if (current_tab == "#tab-speak") {
+      document.getElementById("ask").placeholder = "Speak about...";
     } else {
       document.getElementById("ask").placeholder = "Ask something...";
     }
@@ -509,7 +538,7 @@ function addListenerOnMessageClick(id) {
 function addPrompt(prompt) {
   if (current_tab == "#tab-write") {
     write =
-      '[{"role": "system", "content": "You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible."},{"role": "user", "content": ' +
+      '[{"role": "system", "content": "You are a helpful assistant. Answer as concisely and as truthfully as possible."},{"role": "user", "content": ' +
       JSON.stringify(prompt) +
       " }]";
   } else {
@@ -581,6 +610,8 @@ let sendRequestComp = async function (prompt) {
       prompt: prompt,
       max_tokens: max_tokens,
       temperature: temperature,
+      top_p: top_p,
+      frequency_penalty: frequence,
       presence_penalty: presence,
     }),
   })
@@ -603,6 +634,8 @@ function handleResponseComp(response) {
   //writeCompletion(text);
   if (current_tab == "#tab-write") {
     writeToWrite(text);
+  } else if (current_tab == "#tab-draw") {
+    // writeToDraw(text);
   } else {
     //text = text.join('<br />');
     writeToChat(text, "edit");
@@ -634,6 +667,8 @@ let sendRequestChat = async function (prompt) {
       messages: msgs,
       max_tokens: max_tokens,
       temperature: temperature,
+      top_p: top_p,
+      frequency_penalty: frequence,
       presence_penalty: presence,
     }),
   })
@@ -668,10 +703,47 @@ window.addEventListener("load", function () {
   // Initiate Sliders
   slider("max", "max-range");
   slider("temp", "temp-range", 100);
+  slider("freq", "freq-range", 100);
+  slider("top-p", "top-p-range", 100);
   slider("pres", "pres-range", 100);
   showChat();
   document.querySelector("#ask").focus();
 });
+
+// API resquest to openai (Dall-E)
+let sendRequestDraw = async function (prompt) {
+  //prompt = "Draw a " + prompt + ".";
+
+  let response = await fetch("https://api.openai.com/v1/images/generations", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + openai_api_key,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "dall-e-3",
+      prompt: prompt,
+      size: "1024x1024", // "1024x1024"
+      style: "natural", // vivid or natural
+      n: 1,
+      //response_format: "url",
+    }),
+  })
+    .then((response) => response.json())
+    .catch((error) => console.log(error));
+
+  // console.log(response.choices[0].message.content);
+  // console.log(response);
+
+  const r = await handleResponseDraw(response);
+};
+
+function handleResponseDraw(response) {
+  // console.log(response);
+  let image_url = response.data[0].url;
+  // let text = answer; //.trim();
+  writeToDraw(image_url);
+}
 
 // function showChat(){
 //     document.querySelector('.chatbox').style.display = "block";

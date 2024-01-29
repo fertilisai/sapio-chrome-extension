@@ -4,6 +4,8 @@
 
 ### Added or Changed
 
+- Draw mode
+- New parameters in settings (Top P, frequency penalty)
 - Language support in writer mode
 - New formats in writer mode
 

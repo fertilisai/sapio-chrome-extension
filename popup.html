@@ -26,7 +26,7 @@
                     <ul>
                         <li><a href="#tab-chat" class="active">Chat</a></li>
                         <li><a href="#tab-write">Write</a></li>
-                        <!-- <li><a href="#tab-draw">Draw</a></li> -->
+                        <li><a href="#tab-draw">Draw</a></li>
                         <!-- <li><a href="#tab-speak">Speak/a></li> -->
                     </ul>
                 </div>
@@ -75,8 +75,10 @@
                         <label for="format-pros and cons">Pros and cons</label>
                         <input type="radio" id="format-job description" name="format" value="job description">
                         <label for="format-job description">Job description</label>
-                        <input type="radio" id="format-technical note" name="format" value="technical note">
-                        <label for="format-technical note">Technical note</label>
+                        <input type="radio" id="format-policy" name="format" value="policy">
+                        <label for="format-policy">Policy</label>
+                        <input type="radio" id="format-contract" name="format" value="contract">
+                        <label for="format-contract">Contract</label>
                         <input type="radio" id="format-support ticket" name="format" value="support ticket">
                         <label for="format-support ticket">Support ticket</label>
                     <p></p>
@@ -128,8 +130,14 @@
                 </div>
             </div>
 
-            <!-- <div class="tab" id="tab-draw"></div> -->
-            <!-- <div class="tab" id="tab-speak"></div> -->
+            <div class="tab" id="tab-draw">
+                <div id="canvas"></div>
+            </div>
+            
+            <!-- <div class="tab" id="tab-speak">
+                <div id="rec"></div>
+                <div id="play"></div>
+            </div> -->
 
             <div class="tab" id="tab-settings"> 
                 <form>
@@ -141,7 +149,7 @@
                     <br />
 
                     <label for="api-key">OpenAI API Key</label>
-                    <input type="text" id="api-key" placeholder="sk-..." />
+                    <input input type="password" id="api-key" placeholder="sk-..." />
                     </label>
                     <br />
 
@@ -153,8 +161,9 @@
                     <label for="chat-model">Chat Model</label>
                     <select id="chat-model">
                         <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-                        <!-- <option value="gpt-4">gpt-4</option> -->
-                        <!-- <option value="gpt-4-32k">gpt-4-32k</option> -->
+                        <option value="gpt-3.5-turbo-16k">gpt-3.5-turbo-16k</option>
+                        <option value="gpt-4">gpt-4</option>
+                        <!-- <option value="gpt-4-preview">gpt-4-turbo-preview</option> -->
                     </select>
                     <br />
 
@@ -163,7 +172,7 @@
                         <option value="text-davinci-003">text-davinci-003</option>
                         <option value="text-curie-001">text-curie-001</option>
                         <option value="text-ada-001">text-ada-001</option>
-                    </select>
+                    </select>-
                     <br /> -->
                     
                     <label for="max">Max Lenght</label>
@@ -173,7 +182,17 @@
 
                     <label for="temp">Temperature</label>
                     <input type="text" id="temp" value="0.7" />
-                    <input type="range" id="temp-range" min="0" max="100" value="70" />
+                    <input type="range" id="temp-range" min="0" max="200" value="70" />
+                    <br />
+                    
+                    <label for="pres">Top-P</label>
+                    <input type="text" id="top-p" value="1" />
+                    <input type="range" id="top-p-range" min="0" max="100" value="100" />
+                    <br />
+
+                    <label for="pres">Frequence Penalty</label>
+                    <input type="text" id="freq" value="0" />
+                    <input type="range" id="freq-range" min="-200" max="200" value="0" />
                     <br />
 
                     <label for="pres">Presence Penalty</label>
