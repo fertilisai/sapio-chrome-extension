@@ -724,7 +724,7 @@ let sendRequestDraw = async function (prompt) {
       model: "dall-e-3",
       prompt: prompt,
       size: "1024x1024", // "1024x1024"
-      style: "natural", // vivid or natural
+      style: "vivid", // vivid or natural
       n: 1,
       //response_format: "url",
     }),
