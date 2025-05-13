@@ -1,9 +1,10 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://api.openai.com; img-src 'self' https://*.openai.com https://*.oaiusercontent.com; style-src 'self' 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline'; script-src 'self';">
     <!-- <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png"> -->
     <link rel="icon" type="image/png" sizes="128x128" href="./assets/favicon-128x128.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
@@ -26,7 +27,6 @@
                     <ul>
                         <li><a href="#tab-chat" class="active">Chat</a></li>
                         <li><a href="#tab-write">Write</a></li>
-                        <li><a href="#tab-draw">Draw</a></li>
                         <!-- <li><a href="#tab-speak">Speak/a></li> -->
                     </ul>
                 </div>
@@ -130,10 +130,6 @@
                 </div>
             </div>
 
-            <div class="tab" id="tab-draw">
-                <div id="canvas"></div>
-            </div>
-            
             <!-- <div class="tab" id="tab-speak">
                 <div id="rec"></div>
                 <div id="play"></div>
@@ -160,12 +156,16 @@
                     
                     <label for="chat-model">Chat Model</label>
                     <select id="chat-model">
+                        <option value="gpt-4o-mini">gpt-4o-mini</option>
                         <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-                        <option value="gpt-4o">gpt-4o</option>
-                        <option value="gpt-4-turbo">gpt-4-turbo</option>
                         <option value="gpt-4">gpt-4</option>
-                        
-                        
+                        <option value="gpt-4-turbo">gpt-4-turbo</option>
+                        <option value="gpt-4o">gpt-4o</option>
+                        <option value="gpt-4.1">gpt-4.1</option>
+                        <option value="gpt-4.5">gpt-4.5</option>
+                        <option value="o1">o1</option>
+                        <option value="o3-mini">o3-mini</option>
+                        <option value="o4-mini">o4-mini</option>
                     </select>
                     <br />
 
@@ -177,34 +177,32 @@
                     </select>-
                     <br /> -->
                     
-                    <label for="max">Max Lenght</label>
-                    <input type="text" id="max" value="256" />
-                    <input type="range" id="max-range" min="0" max="2048" value="256" /> 
+                    <label for="max">Max Length</label>
+                    <input type="text" id="max" value="512" />
+                    <input type="range" id="max-range" min="0" max="2048" value="512" />
                     <br />
 
                     <label for="temp">Temperature</label>
                     <input type="text" id="temp" value="0.7" />
                     <input type="range" id="temp-range" min="0" max="200" value="70" />
                     <br />
-                    
-                    <label for="pres">Top-P</label>
+
+                    <label for="top-p">Top-P</label>
                     <input type="text" id="top-p" value="1" />
                     <input type="range" id="top-p-range" min="0" max="100" value="100" />
                     <br />
 
-                    <label for="pres">Frequence Penalty</label>
-                    <input type="text" id="freq" value="0" />
-                    <input type="range" id="freq-range" min="-200" max="200" value="0" />
+                    <div class="toggle-group">
+                        <div class="toggle-item">
+                            <input type="checkbox" role="switch" id="dark-mode" checked/>
+                            <label for="dark-mode">Dark mode</label>
+                        </div>
+                        <div class="toggle-item">
+                            <input type="checkbox" role="switch" id="stream-mode"/>
+                            <label for="stream-mode">Stream responses</label>
+                        </div>
+                    </div>
                     <br />
-
-                    <label for="pres">Presence Penalty</label>
-                    <input type="text" id="pres" value="0" />
-                    <input type="range" id="pres-range" min="-200" max="200" value="0" />
-                    <br />
-
-                    <input type="checkbox" role="switch" id="dark-mode" checked/> 
-                    <label for="switch">Dark mode</label>
-                    <br /><br />
                 </form>
             </div>
 
@@ -226,8 +224,8 @@
     <script src="./js/highlight.min.js"></script>
     <script src="./js/marked.min.js"></script>
     <script src="./js/purify.min.js"></script>
-    <script src="./popup.js"></script>
-    <!-- <script src="./js/activetab.js"></script> -->
+    <!-- Readability.js is loaded by the background script, so we don't need it here -->
     <!-- <script src="./js/Readability.js"></script> -->
+    <script src="./popup.js"></script>
 </body>
 </html>
